@@ -1,5 +1,8 @@
-from parsing.parsed_package import ParsedPackage
+#from parsing.parsed_package import ParsedPackage
 import re
+from parsed_package import ParsedPackage
+file = "/home/hdolivia/Documents/Työt/Työhakemuksia/Reaktor - Software Developer Trainee/Preassignment/Reaktor-Assignment-2022/poetry.lock"
+
 
 class Parser:
     def __init__(self, file = None):
@@ -34,7 +37,8 @@ class Parser:
                 new_extras = True
 
     def create_new_package(self, name):
-        package = ParsedPackage(name = name)
+        package = ParsedPackage(dependencies = [], reverse_dep = [],
+            extras = [], reverse_extras = [], name = name)
         self.add_package(package)
         return package
 
@@ -43,16 +47,22 @@ class Parser:
             if package.name == name:
                 return package
 
+    def parse_name(self, line):
+        return re.search(r'(?<= = ")[^"]*',line).group(0)
+
+    def parse_description(self, line):
+        return re.search(r'(?<== ")[."]*',line).group(0)
+
     def parse_package_line(self, line):
         attribute = re.findall(r"[^ =]*", line)[0]
-        value = re.search(r'(?<==).*',line)
-        if value is not None:
-            value = value.group(0)
         if attribute == "name":
-            package = self.find_package_with_name(name=value)
-            self.set_current_package(package = package, name = value)
-        else:
-            self.current_package.set_attribute(attribute, value)
+            name = self.parse_name(line)
+            package = self.find_package_with_name(name=name)
+            self.set_current_package(package=package, name=name)
+        elif attribute == "description":
+            description = self.parse_description(line)
+            self.current_package.set_attribute(attribute, description)
+        print("self.current_package", self.current_package.name)
 
     def set_current_package(self, package, name):
         if package is None:
@@ -71,9 +81,33 @@ class Parser:
             dependency = self.create_new_package(name=package_name)
         else:
             dependency = package
-        
+        if self.check_if_dep_optional(line):
+            self.add_optional_dependency(dependency=dependency)
+            self.add_optional_reverse_dependency(dependency=dependency)
+        else:
+            self.add_dependency(dependency=dependency)
+            self.add_reverse_dependency(dependency=dependency)
 
-    def add_reverse_dep(self):
-        pass
+    def check_if_dep_optional(self, line):
+        if "optional" in line:
+            optional = re.search(r'(?<=optional = )[^,]*',line).group(0)
+            if optional == "true":
+                return True
+            elif optional == "false":
+                return False
+        return False
+        
+    def add_dependency(self, dependency):
+        self.current_package.add_dependency(dependency=dependency)
+
+    def add_reverse_dependency(self, dependency):
+        dependency.add_rev_dep(current_package = self.current_package)
+
+    def add_optional_dependency(self, dependency):
+        self.current_package.add_optional_dep(dependency=dependency)
+
+    def add_optional_reverse_dependency(self, dependency):
+        dependency.add_optional_rev_dep(current_package = self.current_package)
 
 parser = Parser()
+parser.set_file(file)
