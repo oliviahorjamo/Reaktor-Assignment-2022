@@ -12,3 +12,9 @@ class ParsedPackage:
 
     def add_rev_dep(self, reverse_dep):
         self.reverse_dep.append(reverse_dep)
+
+    def set_attribute(self, attribute, value):
+        if attribute == "name":
+            self.name = value
+        if attribute == "description":
+            self.description = value
