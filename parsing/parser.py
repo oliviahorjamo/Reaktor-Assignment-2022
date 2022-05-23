@@ -51,7 +51,7 @@ class Parser:
         return re.search(r'(?<= = ")[^"]*',line).group(0)
 
     def parse_description(self, line):
-        return re.search(r'(?<== ")[."]*',line).group(0)
+        return re.search(r'(?<== ")[^"]*',line).group(0)
 
     def parse_package_line(self, line):
         attribute = re.findall(r"[^ =]*", line)[0]
@@ -62,7 +62,6 @@ class Parser:
         elif attribute == "description":
             description = self.parse_description(line)
             self.current_package.set_attribute(attribute, description)
-        print("self.current_package", self.current_package.name)
 
     def set_current_package(self, package, name):
         if package is None:
@@ -72,7 +71,6 @@ class Parser:
 
     def add_package(self, package):
         self.parsed_packages.append(package)
-        print("äsken lisätty package", self.parsed_packages[-1].name)
 
     def parse_dependency_line(self, line):
         package_name = re.findall(r"[^ =]*", line)[0]
