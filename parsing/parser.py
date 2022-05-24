@@ -37,7 +37,7 @@ class Parser:
         #self.checking_printing()
 
     def sort_packages(self):
-        self.parsed_packages.sort(key=lambda package: package.name)
+        self.parsed_packages.sort(key=lambda package: package.name.lower())
 
     def create_new_package(self, name):
         package = ParsedPackage(dependencies = set(), reverse_dep = set(),
