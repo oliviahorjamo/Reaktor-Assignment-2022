@@ -1,7 +1,5 @@
-#from parsing.parsed_package import ParsedPackage
+from parsing.parsed_package import ParsedPackage
 import re
-from parsed_package import ParsedPackage
-file = "/home/hdolivia/Documents/Työt/Työhakemuksia/Reaktor - Software Developer Trainee/Preassignment/Reaktor-Assignment-2022/poetry.lock"
 
 
 class Parser:
@@ -12,7 +10,6 @@ class Parser:
 
     def set_file(self, file):
         self.file = file
-        self.parse_file()
 
     def parse_file(self):
         f = open(self.file, "r")
@@ -36,7 +33,7 @@ class Parser:
                 new_dependencies = True
             if "[package.extras]" in line:
                 new_extras = True
-        self.checking_printing()
+        #self.checking_printing()
 
     def create_new_package(self, name):
         package = ParsedPackage(dependencies = set(), reverse_dep = set(),
@@ -59,34 +56,32 @@ class Parser:
         attribute = re.findall(r"[^ =]*", line)[0]
         if attribute == "name":
             name = self.parse_name(line)
-            package = self.find_package_with_name(name=name)
-            self.set_current_package(package=package, name=name)
+            self.handle_parsed_package_name(name)
         elif attribute == "description":
             description = self.parse_description(line)
-            self.current_package.set_attribute(attribute, description)
-
-    def set_current_package(self, package, name):
+            self.handle_parsed_description(description)
+        
+    def handle_parsed_package_name(self, name):
+        package = self.find_package_with_name(name=name)
         if package is None:
-            self.current_package = self.create_new_package(name=name)
+            package = self.create_new_package(name=name)
+            self.set_current_package(package=package)
         else:
-            self.current_package = package
+            self.set_current_package(package=package)
+
+    def handle_parsed_description(self, description):
+        self.current_package.set_description(description)
+
+    def set_current_package(self, package):
+        self.current_package = package
 
     def add_package(self, package):
         self.parsed_packages.append(package)
 
     def parse_dependency_line(self, line):
         package_name = re.findall(r"[^ =]*", line)[0]
-        package = self.find_package_with_name(package_name)
-        if package is None:
-            dependency = self.create_new_package(name=package_name)
-        else:
-            dependency = package
-        if self.check_if_dep_optional(line):
-            self.add_optional_dependency(dependency=dependency)
-            self.add_optional_reverse_dependency(dependency=dependency)
-        else:
-            self.add_dependency(dependency=dependency)
-            self.add_reverse_dependency(dependency=dependency)
+        optional = self.check_if_dep_optional(line)
+        self.handle_parsed_dep(package_name=package_name, optional=optional)
 
     def check_if_dep_optional(self, line):
         if "optional" in line:
@@ -133,6 +128,7 @@ class Parser:
         print("all packages")
         for package in self.parsed_packages:
             print("package name:", package.name)
+            print("package description", package.description)
             for dep in package.dependencies:
                 print("dependency name:", dep.name)
             for op_dep in package.extras:
@@ -143,4 +139,3 @@ class Parser:
                 print("optional reverse dependency:", op_rev_dep.name)
 
 parser = Parser()
-parser.set_file(file)

@@ -15,11 +15,8 @@ class ParsedPackage:
     def add_rev_dep(self, current_package):
         self.reverse_dep.add(current_package)
 
-    def set_attribute(self, attribute, value):
-        if attribute == "name":
-            self.name = value
-        if attribute == "description":
-            self.description = value
+    def set_description(self, description):
+        self.description = description
 
     def add_optional_dep(self, dependency):
         self.extras.add(dependency)
