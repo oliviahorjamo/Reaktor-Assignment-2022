@@ -20,7 +20,6 @@ class Parser:
         new_dependencies = False
         new_extras = False
         for line in f:
-            print("current line:", line)
             if line == "\n":
                 new_package = False
                 new_dependencies = False
@@ -29,16 +28,19 @@ class Parser:
                 self.parse_package_line(line)
             if new_dependencies:
                 self.parse_dependency_line(line)
+            if new_extras:
+                self.parse_extras_line(line)
             if "[[package]]" in line:
                 new_package = True
             if "[package.dependencies]" in line:
                 new_dependencies = True
             if "[package.extras]" in line:
                 new_extras = True
+        self.checking_printing()
 
     def create_new_package(self, name):
-        package = ParsedPackage(dependencies = [], reverse_dep = [],
-            extras = [], reverse_extras = [], name = name)
+        package = ParsedPackage(dependencies = set(), reverse_dep = set(),
+            extras = set(), reverse_extras = set(), name = name)
         self.add_package(package)
         return package
 
@@ -94,6 +96,26 @@ class Parser:
             elif optional == "false":
                 return False
         return False
+
+    def parse_extras_line(self, line):
+        packages = re.findall('"([^"]*)"', line)
+        for package_name in packages:
+            package_name = package_name.strip().split()[0]
+            self.handle_parsed_dep(package_name, optional = True)
+
+    def handle_parsed_dep(self, package_name, optional):
+        package = self.find_package_with_name(package_name)
+        if package is None:
+            dependency = self.create_new_package(name=package_name)
+        else:
+            dependency = package
+        if optional:
+            self.add_optional_dependency(dependency=dependency)
+            self.add_optional_reverse_dependency(dependency=dependency)
+        else:
+            self.add_dependency(dependency=dependency)
+            self.add_reverse_dependency(dependency=dependency)
+            
         
     def add_dependency(self, dependency):
         self.current_package.add_dependency(dependency=dependency)
@@ -106,6 +128,19 @@ class Parser:
 
     def add_optional_reverse_dependency(self, dependency):
         dependency.add_optional_rev_dep(current_package = self.current_package)
+
+    def checking_printing(self):
+        print("all packages")
+        for package in self.parsed_packages:
+            print("package name:", package.name)
+            for dep in package.dependencies:
+                print("dependency name:", dep.name)
+            for op_dep in package.extras:
+                print("optional dependency:", op_dep.name)
+            for rev_rep in package.reverse_dep:
+                print("reverse dependency", rev_rep.name)
+            for op_rev_dep in package.reverse_extras:
+                print("optional reverse dependency:", op_rev_dep.name)
 
 parser = Parser()
 parser.set_file(file)

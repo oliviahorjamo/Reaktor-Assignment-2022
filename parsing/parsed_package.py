@@ -10,18 +10,10 @@ class ParsedPackage:
         self.reverse_extras = reverse_extras
 
     def add_dependency(self, dependency):
-        self.dependencies.append(dependency)
-        print("self name:", self.name)
-        print("self dependencies", self.dependencies)
-        for dep in self.dependencies:
-            print(dep.name)
+        self.dependencies.add(dependency)
 
     def add_rev_dep(self, current_package):
-        self.reverse_dep.append(current_package)
-        print("self name:", self.name)
-        print("self rev dep", self.reverse_dep)
-        for dep in self.reverse_dep:
-            print(dep.name)
+        self.reverse_dep.add(current_package)
 
     def set_attribute(self, attribute, value):
         if attribute == "name":
@@ -30,11 +22,7 @@ class ParsedPackage:
             self.description = value
 
     def add_optional_dep(self, dependency):
-        self.extras.append(dependency)
-        print("self name:", self.name)
-        print("self extras", self.extras)
+        self.extras.add(dependency)
 
     def add_optional_rev_dep(self, current_package):
-        self.reverse_extras.append(current_package)
-        print("self name:", self.name)
-        print("self reverse extras", self.reverse_extras)
+        self.reverse_extras.add(current_package)
