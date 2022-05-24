@@ -33,7 +33,11 @@ class Parser:
                 new_dependencies = True
             if "[package.extras]" in line:
                 new_extras = True
+        self.sort_packages()
         #self.checking_printing()
+
+    def sort_packages(self):
+        self.parsed_packages.sort(key=lambda package: package.name)
 
     def create_new_package(self, name):
         package = ParsedPackage(dependencies = set(), reverse_dep = set(),
@@ -68,6 +72,7 @@ class Parser:
             self.set_current_package(package=package)
         else:
             self.set_current_package(package=package)
+        package.set_optionality(optional=False)
 
     def handle_parsed_description(self, description):
         self.current_package.set_description(description)
@@ -129,8 +134,10 @@ class Parser:
         for package in self.parsed_packages:
             print("package name:", package.name)
             print("package description", package.description)
+            print("package optionality", package.optional)
             for dep in package.dependencies:
                 print("dependency name:", dep.name)
+                print("optionality:", dep.optional)
             for op_dep in package.extras:
                 print("optional dependency:", op_dep.name)
             for rev_rep in package.reverse_dep:

@@ -1,13 +1,14 @@
 
 class ParsedPackage:
     def __init__(self, dependencies,
-                reverse_dep, extras, reverse_extras, name = None, description = None):
+                reverse_dep, extras, reverse_extras, name = None, description = None, optional = True):
         self.name = name
         self.description = description
         self.dependencies = dependencies
         self.reverse_dep = reverse_dep
         self.extras = extras
         self.reverse_extras = reverse_extras
+        self.optional = optional
 
     def add_dependency(self, dependency):
         self.dependencies.add(dependency)
@@ -23,3 +24,6 @@ class ParsedPackage:
 
     def add_optional_rev_dep(self, current_package):
         self.reverse_extras.add(current_package)
+
+    def set_optionality(self, optional):
+        self.optional = optional
