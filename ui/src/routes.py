@@ -9,12 +9,12 @@ def give_file():
     elif request.method == "POST":
         file_to_parse = request.form["file_to_parse"]
         parser.set_file(file=file_to_parse)
-    #TODO myöhemmin tää redirectaa /index -sivulle
-    return redirect("/")
+        parser.parse_file()
+    return redirect("/index")
 
 @app.route("/index", methods = ["GET", "POSt"])
 def index():
     if request.method == "GET":
-        return render_template("index.html", parsed_packages = parser.parsed_packages)
+        return render_template("index.html", packages = parser.parsed_packages)
 
 
