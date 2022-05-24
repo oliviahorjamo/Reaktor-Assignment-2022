@@ -12,9 +12,13 @@ def give_file():
         parser.parse_file()
     return redirect("/index")
 
-@app.route("/index", methods = ["GET", "POSt"])
+@app.route("/index", methods = ["GET", "POST"])
 def index():
     if request.method == "GET":
         return render_template("index.html", packages = parser.parsed_packages)
 
 
+@app.route("/<name>", methods = ["GET", "POST"])
+def package(name):
+    package = parser.find_package_with_name(name)
+    return render_template("package.html", package=package)
