@@ -1,29 +1,66 @@
-<h2>Package {{package.name}} dependencies</h2>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+</head>
 
-<h3>Required dependencies</h3>
-{% for dep in package.dependencies %}
-<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
-{% endfor %}
+{% extends "layout.html" %}
+{% block content %}
 
-<h3>Reverse dependencies</h3>
-{% for dep in package.reverse_dep %}
-<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
-{% endfor %}
+<body>
 
-<h3>Optional dependencies</h3>
-{% for dep in package.extras %}
-{% if not dep.optional %}
-<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
-{% else %}
-<p>{{dep.name}}</p>
-{% endif %}
-{% endfor %}
+    <div>
+        <p>
+            Back to <a href = "/index">index -page</a></p>
+        </p>
+    
+    </div>
+    
+    <div>
+        <h2 class = "header">
+            Package {{package.name}} dependencies
+        </h2>
+    </div>
 
-<h3>Optional reverse dependencies</h3>
-{% for dep in package.reverse_extras %}
-{% if not dep.optional %}
-<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
-{% else %}
-<p>{{dep.name}}</p>
-{% endif %}
-{% endfor %}
+<div class = "packagelist">
+    <h3>Required dependencies</h3>
+    {% for dep in package.dependencies %}
+    <p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
+    {% endfor %}
+
+    <h3>Reverse dependencies</h3>
+    {% for dep in package.reverse_dep %}
+    <p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
+    {% endfor %}
+
+    <h3>Optional dependencies</h3>
+    {% for dep in package.extras %}
+    {% if not dep.optional %}
+    <p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
+    {% else %}
+    <p>{{dep.name}}</p>
+    {% endif %}
+    {% endfor %}
+
+    <h3>Optional reverse dependencies</h3>
+    {% for dep in package.reverse_extras %}
+    {% if not dep.optional %}
+    <p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
+    {% else %}
+    <p>{{dep.name}}</p>
+    {% endif %}
+    {% endfor %}
+</div>
+</body>
+
+<script  type="text/javascript">
+$(window).on('scroll', function () {
+   var scrollTop = $(window).scrollTop();
+   if (scrollTop > 50) {
+       $('#packagelist').stop().animate({height: "30px"},200);
+   }
+   else {
+        $('#packagelist').stop().animate({height: "50px"},200);   
+   }
+});
+</script>
+
+{% endblock %}

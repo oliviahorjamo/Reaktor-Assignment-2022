@@ -25,3 +25,4 @@ def package(name):
         return render_template("package.html", package=package)
     except ValueError:
         return render_template("error.html", message=f"Ei pakettia nimellä {name}")
+        

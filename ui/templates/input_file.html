@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-  
-<head></head>
-  
-<body>
+{% extends "layout.html" %} 
+{% block content %}
+<div>
+    <h2>Give the poetry.lock -file of your choice</h2>
     <form action = "/" method = "POST">
         <input type="file", name = "file_to_parse">
         <br>
         <br>
-        <input type="submit", value="Lähetä tiedosto">
-    </form>
-</body>
-  
+    <input type="submit", value="Lähetä tiedosto">
+</form>
+</div>
+{% endblock %}
 </html>

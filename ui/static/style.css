@@ -1,0 +1,32 @@
+
+
+body {
+    text-align: center;
+    background-color: rgb(222, 241, 241);
+}
+
+div {
+    background-color: white;
+    vertical-align: middle;
+    padding: 10%;
+    max-width: 75%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+form {
+    display: inline-block;
+    text-align: center;
+    height: 100vh;
+}
+
+
+.header {
+    margin: auto;
+    background-color: white;
+    width: inherit
+}
+
+input {
+    align-items: center;
+}
