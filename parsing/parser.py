@@ -135,6 +135,8 @@ class Parser:
 
     def find_package_for_display(self, name):
         package = self.find_package_with_name(name = name)
+        if package is None:
+            raise ValueError
         return self.sort_package_dependencies(package=package)
 
     def checking_printing(self):

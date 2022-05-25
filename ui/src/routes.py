@@ -20,5 +20,8 @@ def index():
 
 @app.route("/package/<name>", methods = ["GET", "POST"])
 def package(name):
-    package = parser.find_package_for_display(name)
-    return render_template("package.html", package=package)
+    try:
+        package = parser.find_package_for_display(name)
+        return render_template("package.html", package=package)
+    except ValueError:
+        return render_template("error.html", message=f"Ei pakettia nimellä {name}")
