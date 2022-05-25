@@ -18,7 +18,7 @@ def index():
         return render_template("index.html", packages = parser.parsed_packages)
 
 
-@app.route("/<name>", methods = ["GET", "POST"])
+@app.route("/package/<name>", methods = ["GET", "POST"])
 def package(name):
-    package = parser.find_package_with_name(name)
+    package = parser.find_package_for_display(name)
     return render_template("package.html", package=package)

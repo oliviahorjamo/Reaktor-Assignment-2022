@@ -7,7 +7,7 @@
     {% for package in packages %}
     <div class = "package">
         {% if not package.optional %}
-            <p><a href = "/{{package.name}}">{{package.name}}</a></p>
+            <p><a href = "/package/{{package.name}}">{{package.name}}</a></p>
         {% else %}
             <p>{{package.name}}</p>
         {% endif %}

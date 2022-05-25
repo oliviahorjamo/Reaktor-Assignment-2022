@@ -27,3 +27,9 @@ class ParsedPackage:
 
     def set_optionality(self, optional):
         self.optional = optional
+
+    def sort_dependencies(self):
+        self.dependencies = sorted(self.dependencies, key=lambda package: package.name)
+        self.reverse_dep = sorted(self.reverse_dep, key=lambda package: package.name)
+        self.extras = sorted(self.extras, key=lambda package: package.name)
+        self.reverse_extras = sorted(self.reverse_extras, key=lambda package: package.name)

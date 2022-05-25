@@ -129,6 +129,14 @@ class Parser:
     def add_optional_reverse_dependency(self, dependency):
         dependency.add_optional_rev_dep(current_package = self.current_package)
 
+    def sort_package_dependencies(self, package):
+        package.sort_dependencies()
+        return package
+
+    def find_package_for_display(self, name):
+        package = self.find_package_with_name(name = name)
+        return self.sort_package_dependencies(package=package)
+
     def checking_printing(self):
         print("all packages")
         for package in self.parsed_packages:

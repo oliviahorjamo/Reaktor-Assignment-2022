@@ -2,18 +2,18 @@
 
 <h3>Required dependencies</h3>
 {% for dep in package.dependencies %}
-<p><a href = "/{{dep.name}}">{{dep.name}}</a></p>
+<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
 {% endfor %}
 
 <h3>Reverse dependencies</h3>
 {% for dep in package.reverse_dep %}
-<p><a href = "/{{dep.name}}">{{dep.name}}</a></p>
+<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
 {% endfor %}
 
 <h3>Optional dependencies</h3>
 {% for dep in package.extras %}
 {% if not dep.optional %}
-<p><a href = "/{{dep.name}}">{{dep.name}}</a></p>
+<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
 {% else %}
 <p>{{dep.name}}</p>
 {% endif %}
@@ -22,7 +22,7 @@
 <h3>Optional reverse dependencies</h3>
 {% for dep in package.reverse_extras %}
 {% if not dep.optional %}
-<p><a href = "/{{dep.name}}">{{dep.name}}</a></p>
+<p><a href = "/package/{{dep.name}}">{{dep.name}}</a></p>
 {% else %}
 <p>{{dep.name}}</p>
 {% endif %}
