@@ -3,12 +3,13 @@
 body {
     text-align: center;
     background-color: rgb(222, 241, 241);
+    font-family: 'Times New Roman', Times, serif;
 }
 
 div {
     background-color: white;
     vertical-align: middle;
-    padding: 10%;
+    padding: 1% 2%;
     max-width: 75%;
     margin-right: auto;
     margin-left: auto;
