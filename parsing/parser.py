@@ -12,6 +12,11 @@ class Parser:
         self.delete_all_information()
         self.file = file
 
+    def delete_all_information(self):
+        self.file = None
+        self.current_package = None
+        self.parsed_packages = []
+
     def parse_file(self):
         f = open(self.file, "r")
         new_package = False
@@ -35,32 +40,6 @@ class Parser:
             if "[package.extras]" in line:
                 new_extras = True
         self.sort_packages()
-        #self.checking_printing()
-
-    def delete_all_information(self):
-        self.file = None
-        self.current_package = None
-        self.parsed_packages = []
-
-    def sort_packages(self):
-        self.parsed_packages.sort(key=lambda package: package.name.lower())
-
-    def create_new_package(self, name):
-        package = ParsedPackage(dependencies = set(), reverse_dep = set(),
-            extras = set(), reverse_extras = set(), name = name)
-        self.add_package(package)
-        return package
-
-    def find_package_with_name(self, name):
-        for package in self.parsed_packages:
-            if package.name == name:
-                return package
-
-    def parse_name(self, line):
-        return re.search(r'(?<= = ")[^"]*',line).group(0)
-
-    def parse_description(self, line):
-        return re.search(r'(?<== ")[^"]*',line).group(0)
 
     def parse_package_line(self, line):
         attribute = re.findall(r"[^ =]*", line)[0]
@@ -70,6 +49,23 @@ class Parser:
         elif attribute == "description":
             description = self.parse_description(line)
             self.handle_parsed_description(description)
+
+    def parse_dependency_line(self, line):
+        package_name = re.findall(r"[^ =]*", line)[0]
+        optional = self.check_if_dep_optional(line)
+        self.handle_parsed_dep(package_name=package_name, optional=optional)
+
+    def parse_extras_line(self, line):
+        packages = re.findall('"([^"]*)"', line)
+        for package_name in packages:
+            package_name = package_name.strip().split()[0]
+            self.handle_parsed_dep(package_name, optional = True)
+
+    def parse_name(self, line):
+        return re.search(r'(?<= = ")[^"]*',line).group(0)
+
+    def parse_description(self, line):
+        return re.search(r'(?<== ")[^"]*',line).group(0)
         
     def handle_parsed_package_name(self, name):
         package = self.find_package_with_name(name=name)
@@ -83,32 +79,6 @@ class Parser:
     def handle_parsed_description(self, description):
         self.current_package.set_description(description)
 
-    def set_current_package(self, package):
-        self.current_package = package
-
-    def add_package(self, package):
-        self.parsed_packages.append(package)
-
-    def parse_dependency_line(self, line):
-        package_name = re.findall(r"[^ =]*", line)[0]
-        optional = self.check_if_dep_optional(line)
-        self.handle_parsed_dep(package_name=package_name, optional=optional)
-
-    def check_if_dep_optional(self, line):
-        if "optional" in line:
-            optional = re.search(r'(?<=optional = )[^,]*',line).group(0)
-            if optional == "true":
-                return True
-            elif optional == "false":
-                return False
-        return False
-
-    def parse_extras_line(self, line):
-        packages = re.findall('"([^"]*)"', line)
-        for package_name in packages:
-            package_name = package_name.strip().split()[0]
-            self.handle_parsed_dep(package_name, optional = True)
-
     def handle_parsed_dep(self, package_name, optional):
         package = self.find_package_with_name(package_name)
         if package is None:
@@ -121,7 +91,32 @@ class Parser:
         else:
             self.add_dependency(dependency=dependency)
             self.add_reverse_dependency(dependency=dependency)
-            
+
+    def check_if_dep_optional(self, line):
+        if "optional" in line:
+            optional = re.search(r'(?<=optional = )[^,]*',line).group(0)
+            if optional == "true":
+                return True
+            elif optional == "false":
+                return False
+        return False
+
+    def find_package_with_name(self, name):
+        for package in self.parsed_packages:
+            if package.name == name:
+                return package
+
+    def create_new_package(self, name):
+        package = ParsedPackage(dependencies = set(), reverse_dep = set(),
+            extras = set(), reverse_extras = set(), name = name)
+        self.add_package(package)
+        return package
+
+    def set_current_package(self, package):
+        self.current_package = package
+
+    def add_package(self, package):
+        self.parsed_packages.append(package)
         
     def add_dependency(self, dependency):
         self.current_package.add_dependency(dependency=dependency)
@@ -135,6 +130,9 @@ class Parser:
     def add_optional_reverse_dependency(self, dependency):
         dependency.add_optional_rev_dep(current_package = self.current_package)
 
+    def sort_packages(self):
+        self.parsed_packages.sort(key=lambda package: package.name.lower())
+
     def sort_package_dependencies(self, package):
         package.sort_dependencies()
         return package
@@ -144,21 +142,5 @@ class Parser:
         if package is None:
             raise ValueError
         return self.sort_package_dependencies(package=package)
-
-    def checking_printing(self):
-        print("all packages")
-        for package in self.parsed_packages:
-            print("package name:", package.name)
-            print("package description", package.description)
-            print("package optionality", package.optional)
-            for dep in package.dependencies:
-                print("dependency name:", dep.name)
-                print("optionality:", dep.optional)
-            for op_dep in package.extras:
-                print("optional dependency:", op_dep.name)
-            for rev_rep in package.reverse_dep:
-                print("reverse dependency", rev_rep.name)
-            for op_rev_dep in package.reverse_extras:
-                print("optional reverse dependency:", op_rev_dep.name)
 
 parser = Parser()
