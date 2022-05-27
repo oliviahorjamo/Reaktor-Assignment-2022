@@ -10,9 +10,10 @@ div {
     background-color: white;
     vertical-align: middle;
     padding: 1% 2%;
-    max-width: 75%;
+    max-width: 60%;
     margin-right: auto;
     margin-left: auto;
+    border-radius: 30px;
 }
 
 form {
@@ -21,13 +22,37 @@ form {
     height: 100vh;
 }
 
-
-.header {
-    margin: auto;
-    background-color: white;
-    width: inherit
-}
-
 input {
     align-items: center;
+}
+
+h2 {
+    padding: 1% 2%
+}
+
+h1 {
+    padding: 1% 2%
+}
+
+h3 {
+    padding: 1% 2%
+}
+
+.infotext {
+    padding: 1% 2%
+}
+
+.package_info {
+    padding: 1% 2%;
+    border-style: double;
+    border-color:rgb(209, 239, 239);
+    border-radius: 0%;
+}
+
+.package_list {
+    padding: 1% 2%;
+    border-style: double;
+    border-color:rgb(209, 239, 239);
+    margin-block: 15px;
+    border-radius: 0%;
 }

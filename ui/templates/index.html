@@ -4,44 +4,27 @@
 {% extends "layout.html" %}
 {% block content %}  
 
-<div>
-    <p>
-        <a href = "/">Return</a> to choosing a file</p>
-    </p>
+<p>
+    <a href = "/">Return</a> to choosing a file
+</p>
 
-</div>
-
-<div>
+<div class = "package_info">
     <h2>
         Below are listed all packages in the given poetry.lock -file.
     </h2>
-    <p>
+    <p class = "infotext">
         The ones that are installed are clickable. By clicking a package name
-        you will arrive at a page listing all dependencies of the given package.
+        you will arrive at a listing of all dependencies of the given package.
     </p>
 </div>
 
-<div class = "packagelist">
-    {% for package in packages %}
-        {% if not package.optional %}
-            <p><a href = "/package/{{package.name}}">{{package.name}}</a></p>
-        {% else %}
-            <p>{{package.name}}</p>
-        {% endif %}
-    {% endfor %}
-</div>
-    
-<script  type="text/javascript">
-    $(window).on('scroll', function () {
-       var scrollTop = $(window).scrollTop();
-       if (scrollTop > 50) {
-           $('#pacakgelist').stop().animate({height: "30px"},200);
-       }
-       else {
-            $('#packagelist').stop().animate({height: "50px"},200);   
-       }
-    });
-</script>
+{% for package in packages %}
+    {% if not package.optional %}
+        <p><a href = "/package/{{package.name}}">{{package.name}}</a></p>
+    {% else %}
+        <p>{{package.name}}</p>
+    {% endif %}
+{% endfor %}
 
 {% endblock %}
 </html>

@@ -11,12 +11,25 @@
 
 <body>
     <div>
-        <h1 class = "header">
-            Poetry.lock Parser App
+        <h1>
+            <u>Poetry.lock Parser App</u>
         </h1>
+
+        {% block content %}
+        {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
+
+    <script  type="text/javascript">
+        $(window).on('scroll', function () {
+           var scrollTop = $(window).scrollTop();
+           if (scrollTop > 50) {
+               $('#div').stop().animate({height: "30px"},200);
+           }
+           else {
+                $('#div').stop().animate({height: "50px"},200);   
+           }
+        });
+    </script>
 </body>
 </html>
 
