@@ -9,6 +9,7 @@ class Parser:
         self.parsed_packages = []
 
     def set_file(self, file):
+        self.delete_all_information()
         self.file = file
 
     def parse_file(self):
@@ -35,6 +36,11 @@ class Parser:
                 new_extras = True
         self.sort_packages()
         #self.checking_printing()
+
+    def delete_all_information(self):
+        self.file = None
+        self.current_package = None
+        self.parsed_packages = []
 
     def sort_packages(self):
         self.parsed_packages.sort(key=lambda package: package.name.lower())
