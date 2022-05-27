@@ -1,7 +1,6 @@
 from parsing.parsed_package import ParsedPackage
 import re
 
-
 class Parser:
     def __init__(self, file = None):
         self.file = file
@@ -105,10 +104,10 @@ class Parser:
         for package in self.parsed_packages:
             if package.name == name:
                 return package
+        return None
 
     def create_new_package(self, name):
-        package = ParsedPackage(dependencies = set(), reverse_dep = set(),
-            extras = set(), reverse_extras = set(), name = name)
+        package = ParsedPackage(name = name)
         self.add_package(package)
         return package
 
