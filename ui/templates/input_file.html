@@ -4,7 +4,8 @@
 {% block content %}
 <div>
     <h2>Give the poetry.lock -file of your choice</h2>
-    <form action = "/" method = "POST">
+    <form action = "/" method = "POST"
+    “enctype=”multipart/form-data”>
         <input type="file" id = "file"
         onchange ="return fileValidation()" 
         name = "file_to_parse">
