@@ -7,7 +7,7 @@ def give_file():
     if request.method == "GET":
         return render_template("input_file.html")
     elif request.method == "POST":
-        file_to_parse = request.form["file_to_parse"]
+        file_to_parse = request.files['file']
         parser.set_file(file=file_to_parse)
         parser.parse_file()
     return redirect("/index")
