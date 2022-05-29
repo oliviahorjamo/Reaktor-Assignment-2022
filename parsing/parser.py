@@ -21,7 +21,6 @@ class Parser:
         file = []
         for line in f:
             file.append(line.decode("utf-8"))
-        print("file", file)
         new_package = False
         new_dependencies = False
         new_extras = False
@@ -49,7 +48,7 @@ class Parser:
         if attribute == "name":
             name = self.parse_name(line)
             self.handle_parsed_package_name(name)
-        elif attribute == "description":
+        if attribute == "description":
             description = self.parse_description(line)
             self.handle_parsed_description(description)
 
