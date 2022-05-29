@@ -17,12 +17,11 @@ class Parser:
         self.parsed_packages = []
 
     def parse_file(self):
-        print("ollaan parsessa")
-        #f = open(self.file, "rb")
         f = self.file.readlines()
         file = []
         for line in f:
             file.append(line.decode("utf-8"))
+        print("file", file)
         new_package = False
         new_dependencies = False
         new_extras = False
@@ -44,7 +43,6 @@ class Parser:
             if "[package.extras]" in line:
                 new_extras = True
         self.sort_packages()
-        #f.close()
 
     def parse_package_line(self, line):
         attribute = re.findall(r"[^ =]*", line)[0]
