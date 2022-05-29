@@ -5,6 +5,7 @@ from parsing.parser import parser
 @app.route("/", methods = ["GET", "POST"])
 def give_file():
     if request.method == "GET":
+        parser.delete_all_information()
         return render_template("input_file.html")
     elif request.method == "POST":
         file_to_parse = request.files['file']

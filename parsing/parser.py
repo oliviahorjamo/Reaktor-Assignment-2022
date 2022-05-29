@@ -8,7 +8,6 @@ class Parser:
         self.parsed_packages = []
 
     def set_file(self, file):
-        self.delete_all_information()
         self.file = file
 
     def delete_all_information(self):
