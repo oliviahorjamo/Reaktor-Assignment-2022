@@ -11,7 +11,7 @@ My solution is a simple web application that is written mainly in Python and use
 
 ### [parsing](https://github.com/oliviahorjamo/Reaktor-Assignment-2022/tree/main/parsing)
 
-- _parser.py_: Handles all parsing of a poetry.lock file that it is given. Returns a list of all packages in the file as ParsedPackage objects.
+- _parser.py_: Includes the code for the class Parser that handles all parsing of a poetry.lock file that it is given. Returns a list of all packages in the file as ParsedPackage objects.
 - _parsed_package.py_: Includes the code for the class ParsedPackage that represents a parsed package.
 
 ### [ui](https://github.com/oliviahorjamo/Reaktor-Assignment-2022/tree/main/ui)
